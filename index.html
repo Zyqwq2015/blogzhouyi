@@ -1,526 +1,203 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zyqwq · 个人空间</title>
-  <!-- 清爽浅蓝主题，极简卡片布局 -->
-  <style>
-    /* 全局重置 & 浅蓝基调 */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: linear-gradient(145deg, #e3f2fd 0%, #bbdefb 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      padding: 1.5rem;
-      margin: 0;
-    }
-
-    /* 主卡片 — 磨砂玻璃质感 + 浅蓝层次 */
-    .profile-card {
-      max-width: 780px;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 48px;
-      padding: 2.8rem 2.8rem 2.8rem 2.8rem;
-      box-shadow: 0 20px 40px rgba(100, 150, 200, 0.25),
-                  inset 0 1px 3px rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      transition: all 0.2s ease;
-    }
-
-    /* 头像 + 主标题区域 */
-    .hero {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 1.5rem 1.2rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .avatar-wrapper {
-      background: linear-gradient(135deg, #90caf9, #64b5f6);
-      width: 96px;
-      height: 96px;
-      border-radius: 32px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 8px 18px rgba(66, 133, 244, 0.2);
-      color: white;
-      font-size: 2.8rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      flex-shrink: 0;
-      border: 2px solid rgba(255, 255, 255, 0.5);
-    }
-
-    .title-group {
-      flex: 1;
-    }
-
-    .title-group h1 {
-      font-size: 2.6rem;
-      font-weight: 650;
-      color: #0a2e4a;
-      letter-spacing: -0.01em;
-      line-height: 1.1;
-      margin-bottom: 0.2rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 0.2rem 0.8rem;
-    }
-
-    .title-group h1 small {
-      font-size: 1.0rem;
-      font-weight: 450;
-      color: #3a6a8a;
-      background: rgba(100, 180, 255, 0.15);
-      padding: 0.1rem 0.8rem;
-      border-radius: 40px;
-      letter-spacing: 0.02em;
-      border: 1px solid rgba(100, 180, 255, 0.2);
-    }
-
-    .subhead {
-      font-size: 1.0rem;
-      color: #1f4b6e;
-      opacity: 0.9;
-      font-weight: 400;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.3rem 1.2rem;
-      margin-top: 0.1rem;
-    }
-
-    .subhead span {
-      background: rgba(255, 255, 255, 0.3);
-      padding: 0.1rem 0.8rem;
-      border-radius: 40px;
-      backdrop-filter: blur(4px);
-      font-size: 0.9rem;
-    }
-
-    /* 社交链接 — 平台图标卡片 */
-    .social-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-      gap: 1rem;
-      margin: 2.2rem 0 2.5rem 0;
-    }
-
-    .social-item {
-      background: rgba(255, 255, 255, 0.5);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      border-radius: 28px;
-      padding: 0.9rem 0.2rem;
-      text-align: center;
-      text-decoration: none;
-      color: #0b344f;
-      font-weight: 500;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      transition: all 0.2s;
-      box-shadow: 0 2px 6px rgba(60, 120, 180, 0.08);
-      letter-spacing: 0.02em;
-    }
-
-    .social-item i {
-      font-style: normal;
-      font-weight: 550;
-    }
-
-    /* 品牌色点缀 (微) */
-    .social-item.x { background: rgba(255, 255, 255, 0.5); }
-    .social-item.youtube { background: rgba(255, 255, 255, 0.5); }
-    .social-item.bilibili { background: rgba(255, 255, 255, 0.5); }
-    .social-item.github { background: rgba(255, 255, 255, 0.5); }
-    .social-item.luogu { background: rgba(255, 255, 255, 0.6); border-color: #90caf9; }
-
-    .social-item:hover {
-      transform: translateY(-3px);
-      background: rgba(255, 255, 255, 0.8);
-      border-color: #64b5f6;
-      box-shadow: 0 8px 18px rgba(70, 140, 220, 0.15);
-      backdrop-filter: blur(8px);
-    }
-
-    .social-item .emoji-badge {
-      font-size: 1.25rem;
-      line-height: 1;
-    }
-
-    /* 洛谷信息卡片 — 特别展示 */
-    .luogu-card {
-      background: rgba(255, 255, 255, 0.45);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      border-radius: 32px;
-      padding: 1.6rem 1.8rem;
-      margin: 1.8rem 0 0.8rem 0;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.5);
-    }
-
-    .luogu-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-
-    .luogu-header h3 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #0d3a5c;
-      letter-spacing: -0.01em;
-    }
-
-    .luogu-header .badge-luogu {
-      background: #1e88e5;
-      color: white;
-      padding: 0.15rem 1rem;
-      border-radius: 40px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.03em;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .luogu-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem 1.8rem;
-      font-size: 0.95rem;
-      color: #1f4b6e;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 0.9rem 1.2rem;
-      border-radius: 28px;
-      backdrop-filter: blur(4px);
-      margin-bottom: 0.8rem;
-    }
-
-    .luogu-stats span {
-      display: flex;
-      align-items: baseline;
-      gap: 5px;
-    }
-
-    .luogu-stats .num {
-      font-weight: 650;
-      color: #0a2e4a;
-      font-size: 1.1rem;
-      letter-spacing: 0.01em;
-    }
-
-    .luogu-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(30, 136, 229, 0.08);
-      padding: 0.4rem 1.2rem 0.4rem 1.2rem;
-      border-radius: 60px;
-      color: #0d47a1;
-      text-decoration: none;
-      font-weight: 480;
-      border: 1px solid rgba(30, 136, 229, 0.15);
-      transition: 0.2s;
-      margin-top: 0.4rem;
-    }
-
-    .luogu-link:hover {
-      background: rgba(30, 136, 229, 0.15);
-      border-color: #42a5f5;
-      transform: scale(1.02);
-    }
-
-    .luogu-link i {
-      font-style: normal;
-      font-size: 1.1rem;
-    }
-
-    /* ---- 永远关注 (关注列表) ---- */
-    .follow-section {
-      margin-top: 2.8rem;
-      padding-top: 1.8rem;
-      border-top: 2px dashed rgba(100, 180, 255, 0.3);
-    }
-
-    .follow-title {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #0a2e4a;
-      letter-spacing: 0.04em;
-      margin-bottom: 1.6rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .follow-title span {
-      background: rgba(30, 136, 229, 0.1);
-      padding: 0.1rem 0.8rem;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-weight: 400;
-      color: #1f5a7a;
-    }
-
-    .follow-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem 1.2rem;
-    }
-
-    .follow-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(4px);
-      padding: 0.5rem 0.8rem 0.5rem 0.5rem;
-      border-radius: 60px;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      transition: all 0.15s ease;
-      text-decoration: none;
-      color: #0a2e4a;
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-
-    .follow-item:hover {
-      background: rgba(255, 255, 255, 0.6);
-      transform: translateY(-2px);
-      border-color: #64b5f6;
-      box-shadow: 0 6px 14px rgba(70, 140, 220, 0.12);
-    }
-
-    .follow-item img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(255, 255, 255, 0.7);
-      flex-shrink: 0;
-      background: #e3f2fd; /* fallback */
-    }
-
-    .follow-item .name {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-weight: 500;
-    }
-
-    /* 名字颜色跟随 (保留原markdown风格) */
-    .follow-item .name .color-green { color: #5EB95E; }
-    .follow-item .name .color-orange { color: #E67E22; }
-    .follow-item .name .color-blue { color: #0E90D2; }
-
-    .footer-note {
-      margin-top: 2.2rem;
-      font-size: 0.8rem;
-      text-align: center;
-      color: #3b6f94;
-      opacity: 0.6;
-      letter-spacing: 0.04em;
-      border-top: 1px solid rgba(255, 255, 255, 0.3);
-      padding-top: 1.8rem;
-    }
-
-    /* 响应式调校 */
-    @media (max-width: 600px) {
-      .profile-card {
-        padding: 2rem 1.5rem;
-        border-radius: 32px;
-      }
-      .hero {
-        gap: 1rem;
-      }
-      .avatar-wrapper {
-        width: 72px;
-        height: 72px;
-        font-size: 2.2rem;
-        border-radius: 28px;
-      }
-      .title-group h1 {
-        font-size: 2.0rem;
-      }
-      .title-group h1 small {
-        font-size: 0.8rem;
-      }
-      .social-grid {
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 0.7rem;
-      }
-      .social-item {
-        font-size: 0.8rem;
-        padding: 0.7rem 0.2rem;
-        border-radius: 24px;
-      }
-      .luogu-stats {
-        flex-direction: column;
-        gap: 0.4rem;
-        font-size: 0.9rem;
-        padding: 0.8rem 1rem;
-      }
-      .follow-grid {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        gap: 0.6rem;
-      }
-      .follow-item {
-        padding: 0.4rem 0.6rem 0.4rem 0.4rem;
-        font-size: 0.8rem;
-      }
-      .follow-item img {
-        width: 30px;
-        height: 30px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .social-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      .follow-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>洛谷个人主页样式页面</title>
+    <style>
+        /* 模拟洛谷 info/success 提示块样式 */
+        .info-block {
+            background: #eef7ff;
+            border-left: 4px solid #4299e1;
+            padding: 12px 16px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success-block {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 10px 14px;
+            margin: 8px 0;
+            border-radius: 4px;
+        }
+        del {
+            color: #999;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        td, th {
+            border: 1px solid #ccc;
+            padding: 6px 12px;
+            text-align: center;
+        }
+        .user-green { color: #5EB95E; font-weight: bold; }
+        .user-orange { color: #E67E22; font-weight: bold; }
+        .user-blue { color: #0E90D2; font-weight: bold; }
+        img {
+            vertical-align: middle;
+            margin: 4px;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-  <div class="profile-card">
-    <!-- 头部：名字 + 标识 -->
-    <div class="hero">
-      <div class="avatar-wrapper">Z</div>
-      <div class="title-group">
-        <h1>
-          Zyqwq
-          <small>· 个人站</small>
-        </h1>
-        <div class="subhead">
-          <span># 码 · 音 · 游</span>
-          <span>🌊 浅蓝信条</span>
-        </div>
-      </div>
-    </div>
 
-    <!-- 平台入驻 (X, YouTube, Bilibili, GitHub) 加上洛谷独立展示 -->
-    <div class="social-grid">
-      <a href="#" class="social-item x" target="_blank" rel="noopener">
-        <span class="emoji-badge">🐦</span> X
-      </a>
-      <a href="#" class="social-item youtube" target="_blank" rel="noopener">
-        <span class="emoji-badge">▶️</span> YouTube
-      </a>
-      <a href="#" class="social-item bilibili" target="_blank" rel="noopener">
-        <span class="emoji-badge">📺</span> Bilibili
-      </a>
-      <a href="#" class="social-item github" target="_blank" rel="noopener">
-        <span class="emoji-badge">🐙</span> GitHub
-      </a>
-      <!-- 洛谷单独作为社交卡片，但为了强调，也放在grid里，同时下面有更详细卡片 -->
-      <a href="https://www.luogu.com.cn/user/1797481" class="social-item luogu" target="_blank" rel="noopener">
-        <span class="emoji-badge">🔷</span> 洛谷
-      </a>
-    </div>
-
-    <!-- 洛谷详细信息卡片 (基于提供的页面数据) -->
-    <div class="luogu-card">
-      <div class="luogu-header">
-        <h3>🔷 洛谷 · 主页</h3>
-        <span class="badge-luogu">ID 1797481</span>
-      </div>
-
-      <!-- 展示从洛谷页面抓取的关键数据 (咕值、等级分等) -->
-      <div class="luogu-stats">
-        <span>⭐ 总咕值 <span class="num">237</span></span>
-        <span>📈 等级分 <span class="num">825</span></span>
-        <span>📚 练习 <span class="num">63</span></span>
-        <span>🏁 比赛 <span class="num">74</span></span>
-        <span>💎 成就 <span class="num">0</span></span>
-      </div>
-
-      <!-- 直接链接到洛谷主页 (与上面grid链接相同，但这里更明显) -->
-      <a href="https://www.luogu.com.cn/user/1797481" class="luogu-link" target="_blank" rel="noopener">
-        <i>🔗</i> 访问完整洛谷主页
-        <span style="opacity:0.6; margin-left:4px;">→</span>
-      </a>
-      <div style="margin-top: 0.6rem; font-size: 0.8rem; color: #2b5a7a; opacity: 0.7; display: flex; gap: 0.8rem; flex-wrap: wrap;">
-        <span>📅 注册时间: 2026-06-26</span>
-        <span>🏅 基础信用: 100</span>
-        <span>🧩 社区贡献: 0</span>
-      </div>
-    </div>
-
-    <!-- 额外小标注：入驻平台汇总 (微交互) -->
-    <div style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; font-size: 0.85rem; color: #1f557a; background: rgba(255,255,255,0.2); padding: 0.3rem 1rem; border-radius: 60px; backdrop-filter: blur(2px); justify-content: center;">
-      <span>✔️ X</span>
-      <span>✔️ YouTube</span>
-      <span>✔️ Bilibili</span>
-      <span>✔️ GitHub</span>
-      <span>✔️ 洛谷</span>
-      <span style="opacity:0.5;">· Zyqwq</span>
-    </div>
-
-    <!-- ========= 永远关注 (关注列表) ========= -->
-    <div class="follow-section">
-      <div class="follow-title">
-        ❤️ 永远关注
-        <span>友情链接</span>
-      </div>
-      <div class="follow-grid">
-        <!-- 11514zbs -->
-        <a href="https://luogu.com.cn/user/1125106" class="follow-item" target="_blank" rel="noopener">
-          <img src="https://cdn.luogu.com.cn/upload/usericon/1125106.png" alt="11514zbs" loading="lazy">
-          <span class="name"><span class="color-green">11514zbs</span></span>
+<!-- 第一块：永远关注 -->
+<div class="info-block">
+    <h3>永远关注</h3>
+    <p>
+        <a href="https://luogu.com.cn/user/1125106">
+            <img src="https://cdn.luogu.com.cn/upload/usericon/1125106.png" alt="头像">
         </a>
-        <!-- qw25rwt -->
-        <a href="https://luogu.com.cn/user/1394207" class="follow-item" target="_blank" rel="noopener">
-          <img src="https://cdn.luogu.com.cn/upload/usericon/1394207.png" alt="qw25rwt" loading="lazy">
-          <span class="name"><span class="color-orange">qw25rwt</span></span>
+        <span class="user-green">11514zbs</span>
+    </p>
+    <p>
+        <a href="https://luogu.com.cn/user/1394207">
+            <img src="https://cdn.luogu.com.cn/upload/usericon/1394207.png" alt="头像">
         </a>
-        <!-- jin66 -->
-        <a href="https://luogu.com.cn/user/2010898" class="follow-item" target="_blank" rel="noopener">
-          <img src="https://cdn.luogu.com.cn/upload/usericon/2010898.png" alt="jin66" loading="lazy">
-          <span class="name"><span class="color-blue">jin66</span></span>
+        <span class="user-orange">qw25rwt</span>
+    </p>
+    <p>
+        <a href="https://luogu.com.cn/user/2010898">
+            <img src="https://cdn.luogu.com.cn/upload/usericon/2010898.png" alt="头像">
         </a>
-        <!-- niannian0123 -->
-        <a href="https://luogu.com.cn/user/1608482" class="follow-item" target="_blank" rel="noopener">
-          <img src="https://cdn.luogu.com.cn/upload/usericon/1608482.png" alt="niannian0123" loading="lazy">
-          <span class="name"><span class="color-orange">niannian0123</span></span>
+        <span class="user-blue">jin66</span>
+    </p>
+    <p>
+        <a href="https://luogu.com.cn/user/1608482">
+            <img src="https://cdn.luogu.com.cn/upload/usericon/1608482.png" alt="头像">
         </a>
-        <!-- JayChou (自己的另一个账号？按原文保留) -->
-        <a href="https://luogu.com.cn/user/1797481" class="follow-item" target="_blank" rel="noopener">
-          <img src="https://cdn.luogu.com.cn/upload/usericon/1797481.png" alt="JayChou" loading="lazy">
-          <span class="name"><span class="color-orange">JayChou</span></span>
+        <span class="user-orange">niannian0123</span>
+    </p>
+    <p>
+        <a href="https://luogu.com.cn/user/1797481">
+            <img src="https://cdn.luogu.com.cn/upload/usericon/1797481.png" alt="头像">
         </a>
-      </div>
-      <div style="margin-top: 1rem; font-size: 0.75rem; color: #2f678b; opacity: 0.6; text-align: center; letter-spacing: 0.02em;">
-        ⭐ 洛谷友链 · 感谢相遇
-      </div>
+        <span class="user-orange">JayChou</span>
+    </p>
+</div>
+
+<!-- Listening to Music 外层info块 -->
+<div class="info-block">
+    <h3>Listening <span style="color:green;"> <span style="color:orange;">to</span> </span> <span style="color:violet;">Music</span></h3>
+
+    <!-- Jay Chou 模块 -->
+    <div class="success-block">
+        <h4>Jay Chou</h4>
+        <p>
+            <a href="https://www.bilibili.com/video/BV1SW4y1H7XC/?spm_id_from=333.337.search-card.all.click">
+                <img src="https://tse1-mm.cn.bing.net/th/id/OIP-C.LzWqMGRPJbtJlsmnAW3q5wHaHa?w=181&h=180&c=7&r=0&o=7&cb=thfc1falcon2&dpr=1.3&pid=1.7&rm=3" alt="周杰伦封面">
+            </a>
+        </p>
+        <p>
+            <a href="https://www.bilibili.com/video/BV1rW411Y7Xb/?spm_id_from=333.337.search-card.all.click">
+                <img src="https://cdn.luogu.com.cn/upload/image_hosting/6ofcnjnm.png" alt="封面">
+            </a>
+            <a href="https://www.bilibili.com/video/BV1kaEFzKE8g/?spm_id_from=333.337.search-card.all.click">
+                <img src="https://tse2-mm.cn.bing.net/th/id/OIP-C.1xOzA82ik4tYFSa-Cbf3gQHaHa?w=169&h=180&c=7&r=0&o=7&cb=thfc1falcon2&dpr=1.3&pid=1.7&rm=3" alt="封面">
+            </a>
+            <a href="https://www.bilibili.com/video/BV1rW411Y7X4/?spm_id_from=333.337.search-card.all.click">
+                <img src="https://picx.zhimg.com/cb3e28771ec660b0ccea4022bf6ebb3c_r.jpg?source=1def8aca" alt="封面">
+            </a>
+        </p>
     </div>
 
-    <div class="footer-note">
-      ✦ 浅蓝 · 个人空间 ✦  <span style="opacity:0.5; margin:0 6px;">|</span>  Zyqwq  ·  2026
+    <!-- Rainie Yang 模块 -->
+    <div class="success-block">
+        <h4>Rainie Yang</h4>
+        <p>
+            <a href="https://www.bilibili.com/video/BV118411B7XU/?spm_id_from=333.337.search-card.all.click">
+                <img src="https://tse2-mm.cn.bing.net/th/id/OIP-C.gZ1xyiYLaw39rRRLfit1KgHaHa?w=172&h=180&c=7&r=0&o=7&cb=thfc1falcon2&dpr=1.3&pid=1.7&rm=3" alt="杨丞琳封面">
+            </a>
+        </p>
     </div>
-  </div>
+
+    <!-- Wang Leehom 模块 -->
+    <div class="success-block">
+        <h4>Wang Leehom</h4>
+        <p>
+            <a href="https://www.bilibili.com/video/BV1TtcAeLExy/">
+                <img src="https://y.qq.com/music/photo_new/T002R300x300M000002ElVxf43rOue_1.jpg?max_age=2592000" alt="王力宏封面">
+            </a>
+        </p>
+    </div>
+</div>
+
+<p>
+    <a href="https://80001.img.dns.ltimg.com/20260619/07f5200e932bda41cd2fa3376d305394.png">
+        <img src="https80001.img.dns.ltimg.com/20260619/07f5200e932bda41cd2fa3376d305394.png" alt="1514图">
+    </a>
+</p>
+
+<p>
+    <img src="https://cdn.luogu.com.cn/upload/image_hosting/is9mgjnc.png" alt="配图1">
+    <img src="https://cdn.luogu.com.cn/upload/image_hosting/o2esms5w.png" alt="配图2">
+</p>
+
+<p><del>✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️✅️</del></p>
+
+<h4>题目分类</h4>
+<table>
+    <tr>
+        <th>题目分类</th>
+        <th>通过题数</th>
+    </tr>
+    <tr>
+        <td>入门</td>
+        <td>？</td>
+    </tr>
+    <tr>
+        <td>普及-</td>
+        <td>？</td>
+    </tr>
+</table>
+
+<p>注册时间:<br>2025-07-11</p>
+<p>橙：2026 4 6</p>
+
+<p>Mail:zhouyi2014love@outlook.com</p>
+<p>手机：15558645207</p>
+<p>VX：sb11451454188wxwxwx</p>
+
+<p>
+    <a href="https://space.bilibili.com/589082220">BiliBili:Zydou_Official</a>
+</p>
+<p>
+    <a href="https://atcoder.jp/users/CN_Zydou?lang=en">Atcoder:CN_Zydou</a>
+</p>
+<p>
+    <a href="https://codeforces.com/profile/CN_Zydou">CF:CN_Zydou</a>
+</p>
+
+<p><a href="http://pan123.5imh.xyz">资源站</a></p>
+<p><a href="">广告位招租</a></p>
+
+<h4>通过题数进度</h4>
+<table>
+    <tr>
+        <th>通过题数</th>
+        <th>时间</th>
+    </tr>
+    <tr>
+        <td>100</td>
+        <td>2026年2月11日</td>
+    </tr>
+    <tr>
+        <td>200</td>
+        <td>2026年4月6日</td>
+    </tr>
+    <tr>
+        <td>300</td>
+        <td>2026年6月28日</td>
+    </tr>
+</table>
+
 </body>
 </html>
